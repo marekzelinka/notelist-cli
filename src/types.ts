@@ -1,6 +1,6 @@
 export interface NoteMutation {
 	content: string;
-	tags: string[];
+	tags?: string[];
 }
 
 export interface NoteEntry extends NoteMutation {
