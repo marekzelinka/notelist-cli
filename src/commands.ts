@@ -1,23 +1,30 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import { Note } from "./models/note.ts";
 
 yargs(hideBin(process.argv))
 	.command(
 		"new <note>",
 		"create a new note",
 		(yargs) => {
-			return yargs.positional("note", {
-				describe: "The content of the note you want to create",
-				type: "string",
-			});
+			return yargs
+				.positional("note", {
+					describe: "The content of the note you want to create",
+					type: "string",
+					demandOption: true,
+				})
+				.option("tags", {
+					alias: "t",
+					type: "string",
+					description: "tags to add to the note",
+				});
 		},
-		async (argv) => {},
+		async (argv) => {
+			const tags = argv.tags?.split(",") ?? [];
+			const note = await Note.createOne({ content: argv.note, tags });
+			console.log("Note added", note.id);
+		},
 	)
-	.option("tags", {
-		alias: "t",
-		type: "string",
-		description: "tags to add to the note",
-	})
 	.command(
 		"all",
 		"get all notes",
