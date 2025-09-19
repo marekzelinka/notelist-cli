@@ -66,14 +66,77 @@ yargs(hideBin(process.argv))
 
 			if (!id) {
 				console.error("Note not found");
+
 				return;
-			}
-			if (Array.isArray(id)) {
+			} else if (Array.isArray(id)) {
 				console.error("Multiple notes exists with id");
+
 				return;
 			}
 
 			console.log("Note removed", id);
+		},
+	)
+	.command(
+		"star <id>",
+		"favorite a note with id",
+		(yargs) =>
+			yargs.positional("id", {
+				type: "string",
+				description: "The id of the note you want to favorite",
+				demandOption: true,
+			}),
+		async (argv) => {
+			const note = await Note.findById(argv.id);
+
+			if (!note || note.favorite) {
+				return;
+			}
+
+			const id = await Note.updateOne(argv.id, { favorite: true });
+
+			if (!id) {
+				console.error("Note not found");
+
+				return;
+			} else if (Array.isArray(id)) {
+				console.error("Multiple notes exists with id");
+
+				return;
+			}
+
+			console.log("Note added to favorites", id);
+		},
+	)
+	.command(
+		["unstar <id>"],
+		"remove favorite from a note with id",
+		(yargs) =>
+			yargs.positional("id", {
+				type: "string",
+				description: "The id of the note you want to favorite",
+				demandOption: true,
+			}),
+		async (argv) => {
+			const note = await Note.findById(argv.id);
+
+			if (!note || !note.favorite) {
+				return;
+			}
+
+			const id = await Note.updateOne(argv.id, { favorite: false });
+
+			if (!id) {
+				console.error("Note not found");
+
+				return;
+			} else if (Array.isArray(id)) {
+				console.error("Multiple notes exists with id");
+
+				return;
+			}
+
+			console.log("Note removed to favorites", id);
 		},
 	)
 	.command(
@@ -101,5 +164,6 @@ yargs(hideBin(process.argv))
 			start(notes, argv.port);
 		},
 	)
+	.strictCommands()
 	.demandCommand(1)
 	.parse();

@@ -11,6 +11,7 @@ export async function getDatabase(): Promise<Database> {
 
 export async function saveDatabase(database: Database): Promise<Database> {
 	const rawDatabase = JSON.stringify(database, null, 2);
+
 	await fs.writeFile(DB_PATH, rawDatabase);
 
 	return database;

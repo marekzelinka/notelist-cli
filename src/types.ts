@@ -1,9 +1,14 @@
 export interface NoteMutation {
-	content: string;
+	content?: string;
 	tags?: string[];
+	favorite?: boolean;
 }
 
-export interface NoteEntry extends NoteMutation {
+export type NewNote = Omit<NoteMutation, "content"> & {
+	content: string;
+};
+
+export interface NoteEntry extends NewNote {
 	id: string;
 }
 

@@ -1,9 +1,9 @@
 import { getDatabase, insertData, saveDatabase } from "../database.ts";
-import type { NoteEntry, NoteMutation } from "../types.ts";
+import type { NewNote, NoteEntry, NoteMutation } from "../types.ts";
 import { nanoid } from "../utils.ts";
 
 export const Note = {
-	createOne: async (noteObject: NoteMutation) => {
+	createOne: async (noteObject: NewNote) => {
 		const note: NoteEntry = {
 			id: nanoid(),
 			...noteObject,
@@ -23,6 +23,37 @@ export const Note = {
 
 		return notes;
 	},
+	findById: async (id: NoteEntry["id"]) => {
+		const { notes } = await getDatabase();
+
+		const note = notes.find((note) => note.id === id);
+
+		return note ?? null;
+	},
+	updateOne: async (id: NoteEntry["id"], updates: NoteMutation) => {
+		let { notes } = await getDatabase();
+
+		const notesWithId = notes.filter((note) => note.id.startsWith(id));
+
+		if (notesWithId.length > 1) {
+			return notesWithId.map((note) => note.id);
+		}
+
+		const existingNote = notesWithId[0];
+
+		if (!existingNote) {
+			return null;
+		}
+
+		const updatedNote = { ...existingNote, ...updates };
+		notes = notes.map((note) =>
+			note.id === existingNote.id ? updatedNote : note,
+		);
+
+		await saveDatabase({ notes });
+
+		return existingNote.id;
+	},
 	deleteOne: async (id: NoteEntry["id"]) => {
 		let { notes } = await getDatabase();
 
@@ -35,7 +66,7 @@ export const Note = {
 		const existingNote = notesWithId[0];
 
 		if (!existingNote) {
-			return;
+			return null;
 		}
 
 		notes = notes.filter((note) => note.id !== existingNote.id);
