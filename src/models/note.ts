@@ -11,13 +11,13 @@ export const Note = {
 
 		return note;
 	},
-	findAll: async (filterBy?: string) => {
+	findAll: async (filter?: string) => {
 		const database = await getDatabase();
 		let notes = database.notes;
 
-		if (filterBy) {
+		if (filter) {
 			notes = notes.filter((note) =>
-				note.content.toLowerCase().includes(filterBy.toLowerCase()),
+				note.content.toLowerCase().includes(filter.toLowerCase()),
 			);
 		}
 
