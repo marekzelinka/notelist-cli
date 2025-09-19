@@ -1,6 +1,7 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { Note } from "./models/note.ts";
+import { start } from "./server.ts";
 import { listNotes } from "./utils.ts";
 
 yargs(hideBin(process.argv))
@@ -88,7 +89,11 @@ yargs(hideBin(process.argv))
 				default: 5000,
 				type: "number",
 			}),
-		async (_argv) => {},
+		async (argv) => {
+			const notes = await Note.findAll();
+
+			start(notes, argv.port);
+		},
 	)
 	.demandCommand(1)
 	.parse();
