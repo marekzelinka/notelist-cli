@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+
+const note = process.argv[2];
+const newNote = {
+	id: crypto.randomUUID(),
+	note,
+};
+console.log("Added note", newNote);

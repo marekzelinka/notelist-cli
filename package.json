@@ -1,0 +1,19 @@
+{
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"format": "biome format --write",
+		"lint": "biome lint --write",
+		"check": "biome check --write"
+	},
+	"bin": {
+		"note": "bin/note"
+	},
+	"packageManager": "pnpm@10.17.0",
+	"devDependencies": {
+		"@biomejs/biome": "2.2.4",
+		"@types/node": "^24.5.2",
+		"typescript": "^5.9.2"
+	}
+}
