@@ -5,10 +5,10 @@ import { listNotes } from "./utils.ts";
 
 yargs(hideBin(process.argv))
 	.command(
-		"new <note>",
+		["new <note>", "+ <note>", "plus <note>"],
 		"create a new note",
-		(yargs) => {
-			return yargs
+		(yargs) =>
+			yargs
 				.positional("note", {
 					describe: "The content of the note you want to create",
 					type: "string",
@@ -18,16 +18,16 @@ yargs(hideBin(process.argv))
 					alias: "t",
 					type: "string",
 					description: "tags to add to the note",
-				});
-		},
+				}),
 		async (argv) => {
 			const tags = argv.tags?.split(",") ?? [];
 			const note = await Note.createOne({ content: argv.note, tags });
+
 			console.log("Note added", note.id);
 		},
 	)
 	.command(
-		"all",
+		["all", "ls"],
 		"get all notes",
 		() => {},
 		async (_argv) => {
@@ -36,42 +36,41 @@ yargs(hideBin(process.argv))
 		},
 	)
 	.command(
-		"find <filter>",
+		["find <filter>", "f <filter>"],
 		"get matching notes",
-		(yargs) => {
-			return yargs.positional("filter", {
+		(yargs) =>
+			yargs.positional("filter", {
 				describe:
 					"The search term to filter notes by, will be applied to note.content",
 				type: "string",
-			});
-		},
+			}),
 		async (argv) => {
 			const notes = await Note.findAll(argv.filter);
 			listNotes(notes);
 		},
 	)
 	.command(
-		"remove <id>",
+		["remove <id>", "rm <id>", "- <id>"],
 		"remove a note by id",
-		(yargs) => {
-			return yargs.positional("id", {
+		(yargs) =>
+			yargs.positional("id", {
 				type: "string",
 				description: "The id of the note you want to remove",
 				demandOption: true,
-			});
-		},
+			}),
 		async (argv) => {
 			const id = await Note.deleteOne(argv.id);
 
 			if (!id) {
-				return console.error("Note not found");
+				console.error("Note not found");
+				return;
 			}
 
 			console.log("Note removed", id);
 		},
 	)
 	.command(
-		"clean",
+		["clean", "reset"],
 		"remove all notes",
 		() => {},
 		async (_argv) => {
@@ -83,13 +82,12 @@ yargs(hideBin(process.argv))
 	.command(
 		"web [port]",
 		"launch website to see notes",
-		(yargs) => {
-			return yargs.positional("port", {
+		(yargs) =>
+			yargs.positional("port", {
 				describe: "port to bind on",
 				default: 5000,
 				type: "number",
-			});
-		},
+			}),
 		async (argv) => {},
 	)
 	.demandCommand(1)
