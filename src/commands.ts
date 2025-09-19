@@ -6,7 +6,7 @@ import { listNotes } from "./utils.ts";
 
 yargs(hideBin(process.argv))
 	.command(
-		["new <note>", "+ <note>", "plus <note>"],
+		["new <note>", "+", "plus", "add"],
 		"create a new note",
 		(yargs) =>
 			yargs
@@ -33,11 +33,12 @@ yargs(hideBin(process.argv))
 		() => {},
 		async (_argv) => {
 			const notes = await Note.findAll();
+
 			listNotes(notes);
 		},
 	)
 	.command(
-		["find <filter>", "f <filter>"],
+		["find <filter>", "f"],
 		"get matching notes",
 		(yargs) =>
 			yargs.positional("filter", {
@@ -47,11 +48,12 @@ yargs(hideBin(process.argv))
 			}),
 		async (argv) => {
 			const notes = await Note.findAll(argv.filter);
+
 			listNotes(notes);
 		},
 	)
 	.command(
-		["remove <id>", "rm <id>", "- <id>"],
+		["remove <id>", "rm", "-"],
 		"remove a note by id",
 		(yargs) =>
 			yargs.positional("id", {
@@ -64,6 +66,10 @@ yargs(hideBin(process.argv))
 
 			if (!id) {
 				console.error("Note not found");
+				return;
+			}
+			if (Array.isArray(id)) {
+				console.error("Multiple notes exists with id");
 				return;
 			}
 
