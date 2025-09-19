@@ -1,0 +1,40 @@
+{
+  "notes": [
+    {
+      "id": "0bc1253e-e291-485b-b52f-239e7e9f1ce2",
+      "content": "this is my first note",
+      "tags": []
+    },
+    {
+      "id": "26f2de1f-6a0c-44fc-8060-6fb8d6b76c77",
+      "content": "this is my first note",
+      "tags": [
+        "new",
+        " important"
+      ]
+    },
+    {
+      "id": "a7d49f16-ea7e-4fe3-b3a1-fc0145532338",
+      "content": "this is my first note",
+      "tags": [
+        "new",
+        "important",
+        "first"
+      ]
+    },
+    {
+      "id": "2d48c2f1-44c4-4f52-9f4b-b601c2752f86",
+      "content": "this is my first note",
+      "tags": [
+        ""
+      ]
+    },
+    {
+      "id": "6b367334-cd05-423d-b41e-1e31459566ae",
+      "content": "this is my fift note",
+      "tags": [
+        ""
+      ]
+    }
+  ]
+}
