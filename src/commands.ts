@@ -55,11 +55,30 @@ yargs(hideBin(process.argv))
 		"remove a note by id",
 		(yargs) => {
 			return yargs.positional("id", {
-				type: "number",
+				type: "string",
 				description: "The id of the note you want to remove",
+				demandOption: true,
 			});
 		},
-		async (argv) => {},
+		async (argv) => {
+			const id = await Note.deleteOne(argv.id);
+
+			if (!id) {
+				return console.error("Note not found");
+			}
+
+			console.log("Note removed", id);
+		},
+	)
+	.command(
+		"clean",
+		"remove all notes",
+		() => {},
+		async (_argv) => {
+			await Note.deleteMany();
+
+			console.log("All notes removed");
+		},
 	)
 	.command(
 		"web [port]",
@@ -71,12 +90,6 @@ yargs(hideBin(process.argv))
 				type: "number",
 			});
 		},
-		async (argv) => {},
-	)
-	.command(
-		"clean",
-		"remove all notes",
-		() => {},
 		async (argv) => {},
 	)
 	.demandCommand(1)
