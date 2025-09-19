@@ -5,12 +5,14 @@
 		// See also https://aka.ms/tsconfig/module
 		"module": "nodenext",
 		"target": "esnext",
+		"rewriteRelativeImportExtensions": true,
 		"lib": ["esnext"],
 		"types": ["node"],
 
 		// Stricter Typechecking Options
 		"noUncheckedIndexedAccess": true,
 		"exactOptionalPropertyTypes": true,
+		"erasableSyntaxOnly": true,
 
 		// Style Options
 		"noImplicitReturns": true,
