@@ -88,7 +88,7 @@ yargs(hideBin(process.argv))
 				default: 5000,
 				type: "number",
 			}),
-		async (argv) => {},
+		async (_argv) => {},
 	)
 	.demandCommand(1)
 	.parse();

@@ -29,6 +29,5 @@
 		"noUncheckedSideEffectImports": true,
 		"moduleDetection": "force",
 		"skipLibCheck": true
-	},
-	"include": ["/bin/note"]
+	}
 }
