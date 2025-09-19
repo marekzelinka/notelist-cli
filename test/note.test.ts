@@ -59,7 +59,6 @@ describe("note cli", () => {
 			],
 		};
 
-		// database.saveDatabase.mockResolvedValue(db);
 		database.saveDatabase.mockResolvedValue(db);
 
 		const idToRemove = "4";

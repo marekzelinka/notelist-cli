@@ -1,10 +1,11 @@
 import { getDatabase, insertData, saveDatabase } from "../database.ts";
 import type { NoteEntry, NoteMutation } from "../types.ts";
+import { nanoid } from "../utils.ts";
 
 export const Note = {
 	createOne: async (noteObject: NoteMutation) => {
 		const note: NoteEntry = {
-			id: crypto.randomUUID(),
+			id: nanoid(),
 			...noteObject,
 		};
 		await insertData(note);
@@ -12,8 +13,7 @@ export const Note = {
 		return note;
 	},
 	findAll: async (filter?: string) => {
-		const database = await getDatabase();
-		let notes = database.notes;
+		let { notes } = await getDatabase();
 
 		if (filter) {
 			notes = notes.filter((note) =>
@@ -24,19 +24,25 @@ export const Note = {
 		return notes;
 	},
 	deleteOne: async (id: NoteEntry["id"]) => {
-		const database = await getDatabase();
-		const notes = database.notes;
+		let { notes } = await getDatabase();
 
-		const note = notes.find((note) => note.id === id);
+		const notesWithId = notes.filter((note) => note.id.startsWith(id));
 
-		if (!note) {
+		if (notesWithId.length > 1) {
+			return notesWithId.map((note) => note.id);
+		}
+
+		const existingNote = notesWithId[0];
+
+		if (!existingNote) {
 			return;
 		}
 
-		const newNotes = notes.filter((note) => note.id !== id);
-		await saveDatabase({ notes: newNotes });
+		notes = notes.filter((note) => note.id !== existingNote.id);
 
-		return id;
+		await saveDatabase({ notes });
+
+		return existingNote.id;
 	},
 	deleteMany: async () => {
 		await saveDatabase({ notes: [] });

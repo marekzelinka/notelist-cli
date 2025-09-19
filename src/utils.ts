@@ -1,10 +1,18 @@
+import { customAlphabet } from "nanoid";
 import type { NoteEntry } from "./types.ts";
+
+export const ID_SIZE = 10;
+
+export const nanoid = customAlphabet("1234567890abcdef", ID_SIZE);
 
 export function listNotes(notes: NoteEntry[]) {
 	for (const note of notes) {
-		console.log();
-		console.log("id:", note.id);
-		console.log("content:", note.content);
-		console.log("tags:", note.tags.join(", "));
+		const tags = note.tags?.join(", ");
+
+		console.log("");
+		console.log(note.id, note.content);
+		if (tags?.length) {
+			console.log(`${" ".repeat(ID_SIZE + 1)}[${tags}]`);
+		}
 	}
 }
